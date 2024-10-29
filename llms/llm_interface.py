@@ -4,4 +4,6 @@ class LLMInterface():
         self.model_name = model_name
         
         if model_name == "gpt-4":
-            self.openai_client = OpenAI()
+            pass
+        elif model_name == "claude":
+            pass
