@@ -111,14 +111,6 @@ def convert_speech_to_text(audio):
 def send_to_gpt4(client: OpenAI, text: str):
     try:
         logger.info(f'prompt: {text}')
-        # response = openai.ChatCompletion.create(
-        #     model="gpt-4",
-        #     messages=[
-        #         {"role": "system", "content": "You are a helpful assistant."},
-        #         {"role": "user", "content": text}
-        #     ]
-        # )
-        # return response.choices[0].message['content']
         response = client.chat.completions.create(
             messages=[{
                 "role": "user",
