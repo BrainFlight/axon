@@ -75,8 +75,6 @@ from dotenv import load_dotenv
 from constants import E7_V1_XRIF_PROMPT
 from proompt_eng import chain_of_thought_v1
 
-claude_client = anthropic.Anthropic(api_key=os.environ.get("ANTHROPIC_API_KEY"))
-
 
 load_dotenv()
 
@@ -84,6 +82,8 @@ logger = logging.getLogger(__name__)
 
 openai_client = OpenAI()
 openai_client.api_key = os.getenv("OPENAI_API_KEY")
+
+claude_client = anthropic.Anthropic(api_key=os.environ.get("ANTHROPIC_API_KEY"))
 
 
 def listen_to_microphone():
