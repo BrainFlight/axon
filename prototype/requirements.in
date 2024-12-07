@@ -1,0 +1,10 @@
+python-dotenv
+pydantic
+PyAudio
+SpeechRecognition
+torch
+torchvision
+huggingface_hub
+transformers
+openai
+anthropic
