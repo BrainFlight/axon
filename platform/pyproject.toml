@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "fydp"
+version = "0.1.0"
+description = "Robotic Navigation with Language Understanding - Team 7 Capstone project"
+authors = ["ammar siddiqui <ammar.siddiqui847@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+pydantic = "^2.10.3"
+fastapi = "^0.115.6"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
