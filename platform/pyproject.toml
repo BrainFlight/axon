@@ -4,12 +4,13 @@ version = "0.1.0"
 description = "Robotic Navigation with Language Understanding - Team 7 Capstone project"
 authors = ["ammar siddiqui <ammar.siddiqui847@gmail.com>"]
 readme = "README.md"
+package-mode = false
 
 [tool.poetry.dependencies]
 python = "^3.10"
 pydantic = "^2.10.3"
-fastapi = "^0.115.6"
 cohere = "^5.13.3"
+fastapi = {extras = ["standard"], version = "^0.115.6"}
 
 
 [build-system]
