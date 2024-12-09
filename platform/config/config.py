@@ -15,3 +15,4 @@ class GlobalConfig:
         self.openai_api_key: str | None = os.getenv("OPENAI_API_KEY")
         self.anthropic_api_key: str | None = os.getenv("ANTHROPIC_API_KEY")
         self.cohere_api_key: str | None = os.getenv("COHERE_API_KEY")
+
