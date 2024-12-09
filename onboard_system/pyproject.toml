@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "onboard-processor"
+name = "onboard-system"
 version = "0.1.0"
 description = ""
 authors = ["ammar siddiqui <ammar.siddiqui847@gmail.com>"]
