@@ -1,77 +1,13 @@
-import os
 import logging
-from collections.abc import Callable
-from abc import ABC, abstractmethod
-from typing import Dict, Any, Optional, List, Union
-from dataclasses import dataclass, field
-from enum import Enum
+from typing import List, Union
 
-from inference.interfaces.openai_interface import OpenAIStrategy
-from inference.interfaces.anthropic_interface import AnthropicStrategy
+# from inference.interfaces.openai_interface import OpenAIStrategy
+# from inference.interfaces.anthropic_interface import AnthropicStrategy
 from inference.interfaces.cohere_interface import CohereStrategy
+from inference.base import LLMStrategy, ModelProvider, ModelConfig, OutputFormat
 from skills.skill_spec import Skill
 
 logger = logging.getLogger(__name__)
-
-
-class ModelProvider(Enum):
-    OPENAI = "openai"
-    ANTHROPIC = "anthropic"
-    COHERE = "cohere"
-    LOCAL = "local"
-    CUSTOM = "custom"
-
-@dataclass
-class OutputFormat:
-    format_type: str  # e.g., "json", "xml", "markdown"
-    schema: Optional[Dict[str, Any]] = None
-    additional_constraints: Optional[Dict[str, Any]] = None
-
-@dataclass
-class ModelConfig:
-    provider: ModelProvider
-    model_name: str
-    api_key: Optional[str] = None
-    additional_params: Dict[str, Any] = field(default_factory=dict)
-    supported_skills: Dict[str, Skill] = field(default_factory=dict)
-    default_output_format: Optional[OutputFormat] = None
-
-class LLMStrategy(ABC):
-    def __init__(self, config: ModelConfig):
-        self.config = config
-        self.active_skills: Dict[str, Skill] = {}
-        self.current_output_format: Optional[OutputFormat] = config.default_output_format
-
-    @abstractmethod
-    def prompt(self, prompt: str, **kwargs) -> str:
-        pass
-
-    @abstractmethod
-    def _format_prompt_with_skills(self, prompt: str) -> str:
-        """Format the prompt to include active skills in provider-specific way"""
-        pass
-
-    @abstractmethod
-    def _format_prompt_for_output(self, prompt: str) -> str:
-        """Format the prompt to enforce output format in provider-specific way"""
-        pass
-
-    def add_skills(self, skill_names: List[str]) -> None:
-        for skill_name in skill_names:
-            if skill_name in self.config.supported_skills:
-                self.active_skills[skill_name] = self.config.supported_skills[skill_name]
-            else:
-                raise ValueError(f"Skill {skill_name} not supported for this model")
-
-    def remove_skills(self, skill_names: List[str]) -> None:
-        for skill_name in skill_names:
-            self.active_skills.pop(skill_name, None)
-
-    def set_output_format(self, output_format: Union[OutputFormat, str]) -> None:
-        if isinstance(output_format, str):
-            self.current_output_format = OutputFormat(format_type=output_format)
-        else:
-            self.current_output_format = output_format
 
     
 class ModelStrategyFactory:
@@ -84,10 +20,10 @@ class ModelStrategyFactory:
     ModelStrategyFactory.register_strategy(ModelProvider.LOCAL, MyCustomStrategy)
     """
     _strategies = {
-        ModelProvider.OPENAI: OpenAIStrategy,
-        ModelProvider.ANTHROPIC: AnthropicStrategy,
+        # ModelProvider.OPENAI: OpenAIStrategy,
+        # ModelProvider.ANTHROPIC: AnthropicStrategy,
         ModelProvider.COHERE: CohereStrategy,
-        ModelProvider.Local: LocalStrategy,
+        # ModelProvider.LOCAL: LocalStrategy,
     }
 
     @classmethod
@@ -122,44 +58,6 @@ class ModelInterface:
     
     def update_config(self, new_config: ModelConfig) -> None:
         self.strategy = ModelStrategyFactory.create_strategy(new_config)
-
-# Example usage
-def example_usage():
-    # Define supported skills
-    code_skill = Skill(
-        name="code_generation",
-        description="Generate code in various programming languages",
-        parameters={"language": "string", "task": "string"}
-    )
-    
-    math_skill = Skill(
-        name="math_solving",
-        description="Solve mathematical problems",
-        parameters={"problem": "string", "show_work": "boolean"}
-    )
-    
-    # Configure and create OpenAI interface with skills
-    openai_config = ModelConfig(
-        provider=ModelProvider.OPENAI,
-        model_name="gpt-4",
-        api_key="your-api-key",
-        supported_skills={"code_generation": code_skill, "math_solving": math_skill},
-        default_output_format=OutputFormat(format_type="json")
-    )
-    
-    model = ModelInterface(openai_config)
-    
-    # Add specific skills
-    model.add_skills(["code_generation"])
-    
-    # Set output format
-    model.set_output_format(OutputFormat(
-        format_type="json",
-        schema={"type": "object", "properties": {"code": {"type": "string"}}}
-    ))
-    
-    # Make request
-    response = model.prompt("Write a Python function to calculate fibonacci numbers")
 
 
 # class ModelInterface:
@@ -216,3 +114,41 @@ def example_usage():
 #     def set_output_format(self, output_format: str):
 #         '''Set output format for model.'''
 #         pass
+
+# # Example usage
+# def example_usage():
+#     # Define supported skills
+#     code_skill = Skill(
+#         name="code_generation",
+#         description="Generate code in various programming languages",
+#         parameters={"language": "string", "task": "string"}
+#     )
+    
+#     math_skill = Skill(
+#         name="math_solving",
+#         description="Solve mathematical problems",
+#         parameters={"problem": "string", "show_work": "boolean"}
+#     )
+    
+#     # Configure and create OpenAI interface with skills
+#     openai_config = ModelConfig(
+#         provider=ModelProvider.OPENAI,
+#         model_name="gpt-4",
+#         api_key="your-api-key",
+#         supported_skills={"code_generation": code_skill, "math_solving": math_skill},
+#         default_output_format=OutputFormat(format_type="json")
+#     )
+    
+#     model = ModelInterface(openai_config)
+    
+#     # Add specific skills
+#     model.add_skills(["code_generation"])
+    
+#     # Set output format
+#     model.set_output_format(OutputFormat(
+#         format_type="json",
+#         schema={"type": "object", "properties": {"code": {"type": "string"}}}
+#     ))
+    
+#     # Make request
+#     response = model.prompt("Write a Python function to calculate fibonacci numbers")
