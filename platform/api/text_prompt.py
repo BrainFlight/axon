@@ -3,18 +3,18 @@ from typing import List, Optional, Dict, Any
 
 from pydantic import BaseModel
 from fastapi import APIRouter
-from inference.model_interface import ModelConfig, ModelInterface, ModelProvider
 
+from inference.model_interface import ModelConfig, ModelInterface, ModelProvider
 from config.config import GlobalConfig
 
 config = GlobalConfig()
 
 cohere_config = ModelConfig(
-        provider=ModelProvider.COHERE,
-        model_name="cohere",
-        api_key=config.cohere_api_key,
-    )
-    
+    provider=ModelProvider.COHERE,
+    model_name="cohere",
+    api_key=config.cohere_api_key,
+)
+
 cohere_interface = ModelInterface(cohere_config)
 
 class prompt_body(BaseModel):
@@ -78,23 +78,3 @@ async def text_prompt_service(body: prompt_body):
     response = json.loads(response)
 
     return api_response(response=response)
-
-
-# from inference.model_interface import ModelConfig, ModelInterface, ModelProvider
-# from config.config import GlobalConfig
-
-
-# query1 = "Can you get a coffee to the robohub?"
-# query2 = "get me an energy drink, I'm near the elevators on the 1st floor"
-
-
-# config = GlobalConfig()
-
-# cohere_config = ModelConfig(
-#     provider=ModelProvider.COHERE,
-#     model_name="cohere",
-#     api_key=config.cohere_api_key,
-# )
-    
-# cohere_interface = ModelInterface(cohere_config)
-# print(cohere_interface.prompt(f"{prompt_v1} {query2}"))
