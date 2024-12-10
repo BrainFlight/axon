@@ -6,16 +6,11 @@ import logging
 from qdrant_client import QdrantClient
 from qdrant_client.models import VectorParams, PointStruct
 
-from config import (
-    DEFAULT_VECTORS_CONFIG,
-    DEFAULT_COLLECTION_NAME,
-    VECTOR_DEFAULT_TOP_K
-)
 
 logger = logging.getLogger(__name__)
 
 class VectorDBClient():
-    def __init__(self, url: str, collection_name: str = DEFAULT_COLLECTION_NAME):
+    def __init__(self, url: str, collection_name: str):
         self.client = QdrantClient(url=url)
         self.collection_name = collection_name
         if not self.client.collection_exists(collection_name=collection_name):
@@ -25,7 +20,7 @@ class VectorDBClient():
     def create_collection(
         self,
         collection_name: str,
-        vectors_config: VectorParams = DEFAULT_VECTORS_CONFIG
+        vectors_config: VectorParams
     ) -> bool:
         '''
         Create a new collection.
@@ -54,7 +49,7 @@ class VectorDBClient():
     def search_vectors(
         self, 
         vector: List[float], 
-        top_k: int = VECTOR_DEFAULT_TOP_K, 
+        top_k: int, 
         with_payload: bool = True
     ) -> List:
         '''
@@ -79,7 +74,7 @@ class VectorDBClient():
     def search_vector_by_id(
         self, 
         vector_id: UUID | str, 
-        top_k: int = VECTOR_DEFAULT_TOP_K, 
+        top_k: int, 
         with_payload: bool = True
     ) -> List:
         '''
