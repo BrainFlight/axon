@@ -32,28 +32,28 @@ class S3Client:
         """Create a new bucket."""
         if not self.bucket_exists(bucket_name):
             self.s3_client.create_bucket(Bucket=bucket_name)
-            print(f"Bucket '{bucket_name}' created")
+            logger.info(f"Bucket '{bucket_name}' created")
         else:
-            print(f"Bucket '{bucket_name}' already exists")
+            logger.info(f"Bucket '{bucket_name}' already exists")
 
     def get_object(self, bucket_name, object_name):
         """Get object from bucket."""
-        return self.s3_client.get_object(Bucket=bucket_name, Key=object_name)['Body'].read().decode('utf')
+        return self.s3_client.get_object(Bucket=bucket_name, Key=object_name)
 
     def upload_object(self, file_path, bucket_name, object_name):
         """Upload object to bucket."""
         self.s3_client.upload_file(file_path, bucket_name, object_name)
-        print(f"'{file_path}' is successfully uploaded as '{object_name}' to bucket '{bucket_name}'")
+        logger.info(f"'{file_path}' is successfully uploaded as '{object_name}' to bucket '{bucket_name}'")
 
     def download_file(self, bucket_name, object_name, file_path):
         """Download object from bucket."""
         self.s3_client.download_file(bucket_name, object_name, file_path)
-        print(f"'{object_name}' is successfully downloaded as '{file_path}' from bucket '{bucket_name}'")
+        logger.info(f"'{object_name}' is successfully downloaded as '{file_path}' from bucket '{bucket_name}'")
     
     def delete_object(self, bucket_name, object_name):
         """Delete object from bucket."""
         self.s3_client.delete_object(Bucket=bucket_name, Key=object_name)
-        print(f"'{object_name}' is successfully deleted from bucket '{bucket_name}'")
+        logger.info(f"'{object_name}' is successfully deleted from bucket '{bucket_name}'")
 
 # NOTE: Example usage
 # s3_client = S3Client(
