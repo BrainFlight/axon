@@ -4,6 +4,7 @@ from typing import List, Union
 # from inference.interfaces.openai_interface import OpenAIStrategy
 # from inference.interfaces.anthropic_interface import AnthropicStrategy
 from inference.interfaces.cohere_interface import CohereStrategy
+from inference.interfaces.local_interface import LocalStrategy
 from inference.base import LLMStrategy, ModelProvider, ModelConfig, OutputFormat
 from skills.skill_spec import Skill
 
@@ -23,7 +24,7 @@ class ModelStrategyFactory:
         # ModelProvider.OPENAI: OpenAIStrategy,
         # ModelProvider.ANTHROPIC: AnthropicStrategy,
         ModelProvider.COHERE: CohereStrategy,
-        # ModelProvider.LOCAL: LocalStrategy,
+        ModelProvider.LOCAL: LocalStrategy,
     }
 
     @classmethod
