@@ -27,7 +27,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
 app.include_router(experiment_router)
 app.include_router(image_text_prompt_router)
 app.include_router(text_prompt_router)

@@ -16,3 +16,12 @@ class GlobalConfig:
         self.anthropic_api_key: str | None = os.getenv("ANTHROPIC_API_KEY")
         self.cohere_api_key: str | None = os.getenv("COHERE_API_KEY")
 
+        # AWS and MinIO
+        self.aws_access_key_id: str | None = os.getenv("AWS_ACCESS_KEY_ID")
+        self.aws_secret_access_key: str | None = os.getenv("AWS_SECRET_ACCESS_KEY")
+        self.aws_region_name: str = os.getenv("AWS_REGION_NAME", "us-east-1")
+        self.minio_endpoint_url: str | None = os.getenv("MINIO_ENDPOINT_URL")
+
+        # Qdrant Vector DB
+        self.qdrant_host: str = os.getenv("QDRANT_HOST", "http://localhost")
+        self.qdrant_port: int = os.getenv("QDRANT_PORT", 6333)
