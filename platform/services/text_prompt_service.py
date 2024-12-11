@@ -28,8 +28,8 @@ local_interface = ModelInterface(local_config)
 def text_prompt_service(input_prompt: str) -> str:
     """Text Prompt Service."""
     response = local_interface.prompt(f"{PROMPT_V1}{input_prompt}")
-    response = json.loads(response)
+    # response = json.loads(response)
 
-    logger.info(f"Response received from {response}")
+    logger.info(f"Response received: {response}")
 
     return response

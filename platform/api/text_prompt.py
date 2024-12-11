@@ -30,4 +30,4 @@ def text_prompt(body: prompt_body):
     # TODO: Validate input
     response = text_prompt_service(body.prompt)
 
-    return api_response(response=response)
+    return api_response(response={"Response": response})
