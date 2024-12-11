@@ -1,5 +1,5 @@
 
 .PHONY: run-api-dev
-rup-api-dev:
+run-api-dev:
 	fastapi dev main.py
 
