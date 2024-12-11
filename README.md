@@ -85,10 +85,19 @@ COHERE_API_KEY=""
 poetry install
 ```
 
+### API and Swagger Docs
+
+1. Run the API
+
+```sh
+cd platform
+fastapi dev main.py
+```
+
+2. Visit http://localhost:8000/docs
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-
-<!-- ROADMAP -->
 ## Roadmap
 
 - [] Build Inference Pods
