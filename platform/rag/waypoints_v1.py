@@ -1,130 +1,166 @@
-import re
-import json
-from typing import Dict, List, Optional
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from typing import Dict, List, Optional, Any
 from functools import lru_cache
-from collections import defaultdict
 import uuid
-
 
 @dataclass(frozen=True)
 class Waypoint:
+    """Immutable waypoint data structure."""
     id: uuid.UUID
     name: str
     floor: int
-    keywords: List[str] = None
-    aliases: List[str] = None
+    keywords: List[str] = field(default_factory=list)
+    aliases: List[str] = field(default_factory=list)
 
 class WaypointRAG:
     def __init__(self):
         self._waypoints: Dict[str, Waypoint] = {}
-        self._aliases: defaultdict = defaultdict(set)
-        self._normalize_pattern = re.compile(r'[^a-z0-9\s]')
-        self._floor_index: defaultdict = defaultdict(set)
+        self._alias_map: Dict[str, str] = {}
         
-    def _normalize_text(self, text: str) -> str:
-        """Normalize text for consistent matching."""
-        return self._normalize_pattern.sub('', text.lower())
-    
+    def initialize_waypoints(self, waypoints_list: List[Dict[str, Any]]):
+        """Initialize the waypoint system with all known locations from a list of dictionaries."""
+        for waypoint_data in waypoints_list:
+            self.add_waypoint(
+                name=waypoint_data["name"],
+                floor=waypoint_data["floor"],
+                keywords=waypoint_data.get("keywords", []),
+                aliases=waypoint_data.get("aliases", [])
+            )
+            
     def add_waypoint(
-            self, 
-            name: str, 
-            floor: int, 
-            keywords: Optional[List[str]] = None,
-            aliases: Optional[List[str]] = None
-        ):
-        """Add a waypoint with optimized indexing."""
-        waypoint = Waypoint(name=name, floor=floor)
-        normalized_name = self._normalize_text(name)
+        self, 
+        name: str, 
+        floor: int, 
+        keywords: Optional[List[str]] = None, 
+        aliases: Optional[List[str]] = None
+    ) -> Waypoint:
+        """Add a waypoint with all its properties."""
+        waypoint = Waypoint(
+            id=uuid.uuid4(),
+            name=name,
+            floor=floor,
+            keywords=keywords or [],
+            aliases=aliases or []
+        )
         
-        self._waypoints[normalized_name] = waypoint
-        self._floor_index[floor].add(normalized_name)
+        self._waypoints[name] = waypoint
         
         if aliases:
             for alias in aliases:
-                normalized_alias = self._normalize_text(alias)
-                self._aliases[normalized_alias].add(normalized_name)
+                self._alias_map[alias] = name
                 
+        return waypoint
+    
     @lru_cache(maxsize=1024)
     def get_waypoint_by_name_or_alias(self, query: str) -> Optional[Waypoint]:
-        """Cached waypoint retrieval with normalized matching."""
-        normalized_query = self._normalize_text(query)
-        
-        # Direct lookup
-        if normalized_query in self._waypoints:
-            return self._waypoints[normalized_query]
+        """Retrieve waypoint with caching."""
+        if query in self._waypoints:
+            return self._waypoints[query]
             
-        # Alias lookup
-        if normalized_query in self._aliases:
-            for waypoint_name in self._aliases[normalized_query]:
-                return self._waypoints[waypoint_name]
+        if query in self._alias_map:
+            return self._waypoints[self._alias_map[query]]
         
         return None
     
-    @lru_cache(maxsize=128)
-    def get_waypoints_by_floor(self, floor: int) -> List[Waypoint]:
-        """Cached retrieval of all waypoints on a specific floor."""
-        return [self._waypoints[name] for name in self._floor_index[floor]]
-    
+    @lru_cache(maxsize=1)
     def generate_prompt_with_waypoints(self) -> str:
         """Generate prompt with cached waypoint list."""
-        return self._generate_prompt_template(self._get_waypoint_list())
-    
-    @lru_cache(maxsize=1)
-    def _get_waypoint_list(self) -> str:
-        """Cache the waypoint list since it rarely changes."""
-        waypoint_list = []
-        for waypoint in self._waypoints.values():
-            waypoint_list.append(f"- {waypoint.name}, floor: {waypoint.floor}")
-        return '\n'.join(sorted(waypoint_list))
-    
-    @staticmethod
-    def _generate_prompt_template(waypoint_list: str) -> str:
-        """Static prompt template generation."""
-        return f"""You control a robot that can navigate through a building based on a json instruction format, you understand several waypoints that have been given to you before (you can use RAG to retrieve what room numbers or waypoints correspond to which people or semantics).
-        Here are all the waypoints you have access to (you must refer to them with these exact titles when generating the output format):
-        {waypoint_list}
+        waypoint_list = [
+            f"- {waypoint.name}, floor: {waypoint.floor}"
+            for waypoint in self._waypoints.values()
+        ]
+        
+        return f"""
+            You control a robot that can navigate through a building based on a json instruction format, you understand several waypoints that have been given to you before (you can use RAG to retrieve what room numbers or waypoints correspond to which people or semantics).
+            Here are all the waypoints you have access to (you must refer to them with these exact titles when generating the output format):
+            {chr(10).join(sorted(waypoint_list))}
 
-        Extra information:
-        - Room 2106 is Zach's office
-        - Coffee and Donuts can be referred to as CnD by students
+            Extra information:
+            - Room 2106 is Zach's office
+            - Coffee and Donuts can be referred to as CnD by students
 
-        Example Prompt: Can you pick something up from Zach's office and drop it off at the RoboHub?
+            Example Prompt: Can you pick something up from Zach's office and drop it off at the RoboHub?
 
-        Example Answer:
-        {{
-            "goals": [
-                {{
-                    "name": "Room 2106",
-                    "floor": 1
-                }},
-                {{
-                    "name": "RoboHub Entrance",
-                    "floor": 1
-                }}
-            ]
-        }}
+            Example Answer:
+            {{
+                "goals": [
+                    {{
+                        "name": "Room 2106",
+                        "floor": 1
+                    }},
+                    {{
+                        "name": "RoboHub Entrance",
+                        "floor": 1
+                    }}
+                ]
+            }}
         """
 
-# Optimized initialization
-def initialize_waypoints() -> WaypointRAG:
-    """Initialize the waypoint system with all known locations."""
+# Example usage
+if __name__ == "__main__":
+    # Example waypoints data (could be loaded from JSON file)
+    waypoints_data = [
+        {
+            "name": "E7 1st floor Elevators",
+            "floor": 1,
+            "keywords": ["elevator", "lift"],
+            "aliases": []
+        },
+        {
+            "name": "E7 North Entrance",
+            "floor": 1,
+            "keywords": ["entrance", "door", "north"],
+            "aliases": []
+        },
+        {
+            "name": "E7 East Entrance",
+            "floor": 1,
+            "keywords": ["entrance", "door", "east"],
+            "aliases": []
+        },
+        {
+            "name": "E7 South Entrance",
+            "floor": 1,
+            "keywords": ["entrance", "door", "south"],
+            "aliases": []
+        },
+        {
+            "name": "E7 Coffee and Donuts",
+            "floor": 1,
+            "keywords": ["coffee", "food", "drinks"],
+            "aliases": ["CnD"]
+        },
+        {
+            "name": "Outreach Classroom",
+            "floor": 1,
+            "keywords": ["classroom", "teaching"],
+            "aliases": []
+        },
+        {
+            "name": "RoboHub Entrance",
+            "floor": 1,
+            "keywords": ["robots", "entrance"],
+            "aliases": []
+        },
+        {
+            "name": "Vending Machine",
+            "floor": 1,
+            "keywords": ["snacks", "drinks"],
+            "aliases": []
+        },
+        {
+            "name": "Room 2106",
+            "floor": 2,
+            "keywords": ["office", "workspace"],
+            "aliases": ["Zach"]
+        }
+    ]
+    
     rag = WaypointRAG()
+    rag.initialize_waypoints(waypoints_data)
     
-    # Use a tuple for memory efficiency
-    waypoints_data = (
-        ("E7 1st floor Elevators", 1, None),
-        ("E7 North Entrance", 1, None),
-        ("E7 East Entrance", 1, None),
-        ("E7 South Entrance", 1, None),
-        ("E7 Coffee and Donuts", 1, ["CnD"]),
-        ("Outreach Classroom", 1, None),
-        ("RoboHub Entrance", 1, None),
-        ("Vending Machine", 1, None),
-        ("Room 2106", 2, ["Zach's office"])
-    )
+    cnd = rag.get_waypoint_by_name_or_alias("CnD")
+    print(f"CnD lookup: {cnd}")
+    print(f"CnD keywords: {cnd.keywords}")
+    print(f"CnD UUID: {cnd.id}")
     
-    for name, floor, aliases in waypoints_data:
-        rag.add_waypoint(name, floor, aliases)
-    
-    return rag

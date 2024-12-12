@@ -13,6 +13,7 @@ cohere = "^5.13.3"
 fastapi = {extras = ["standard"], version = "^0.115.6"}
 boto3 = "^1.35.77"
 qdrant-client = "^1.12.1"
+python-dotenv = "^1.0.1"
 
 
 [build-system]
