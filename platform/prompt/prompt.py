@@ -34,3 +34,20 @@ Example Answer:
 }
 Prompt: 
 """
+
+import json
+from dataclasses import dataclass
+from typing import List, Dict, Any, Optional, Callable
+from uuid import UUID
+
+@dataclass
+class Prompt:
+    id: UUID
+    prompt: str
+    version: str
+    created_at: str
+    updated_at: str
+    parameters: Dict[str, Any]
+    metadata: Dict[str, Any]
+
+

@@ -63,38 +63,14 @@ class WaypointRAG:
         return None
     
     @lru_cache(maxsize=1)
-    def generate_prompt_with_waypoints(self) -> str:
+    def get_waypoints(self) -> str:
         """Generate prompt with cached waypoint list."""
         waypoint_list = [
             f"- {waypoint.name}, floor: {waypoint.floor}"
             for waypoint in self._waypoints.values()
         ]
         
-        return f"""
-            You control a robot that can navigate through a building based on a json instruction format, you understand several waypoints that have been given to you before (you can use RAG to retrieve what room numbers or waypoints correspond to which people or semantics).
-            Here are all the waypoints you have access to (you must refer to them with these exact titles when generating the output format):
-            {chr(10).join(sorted(waypoint_list))}
-
-            Extra information:
-            - Room 2106 is Zach's office
-            - Coffee and Donuts can be referred to as CnD by students
-
-            Example Prompt: Can you pick something up from Zach's office and drop it off at the RoboHub?
-
-            Example Answer:
-            {{
-                "goals": [
-                    {{
-                        "name": "Room 2106",
-                        "floor": 1
-                    }},
-                    {{
-                        "name": "RoboHub Entrance",
-                        "floor": 1
-                    }}
-                ]
-            }}
-        """
+        return f"{chr(10).join(sorted(waypoint_list))}"
 
 # Example usage
 if __name__ == "__main__":
