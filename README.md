@@ -49,7 +49,10 @@
 
 API Example
 
-![alt text](./docs/images/endpoint-example-1.png)
+<div align="center">
+<img width="60%" style="text-align: center" src="./docs/images/endpoint-example-1.png">
+</div>
+<!-- ![alt text](./docs/images/endpoint-example-1.png) -->
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
