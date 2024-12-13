@@ -1,5 +1,5 @@
 import uuid
-from typing import List, Optional
+from typing import List, Dict, Optional, Any
 import logging
 
 from pydantic import BaseModel
@@ -11,7 +11,12 @@ logger = logging.getLogger(__name__)
 
 class VectorInput(BaseModel):
     vector: List[float]
-    payload: dict
+    payload: Dict[str, Any]
+
+class VectorOutput(BaseModel):
+    vector_id: uuid.UUID
+    vector: List[float]
+    payload: Dict[str, Any]
 
 class VectorDBClient():
     def __init__(
@@ -124,7 +129,6 @@ class VectorDBClient():
             ]
         )
 
-    # TODO: Create batch upsert method
     def upsert_vectors(self, vectors: List[VectorInput]):
         '''
         Insert or update a vector.
