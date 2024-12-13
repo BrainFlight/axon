@@ -1,5 +1,5 @@
 import uuid
-from typing import List
+from typing import List, Optional
 import logging
 
 from pydantic import BaseModel
@@ -18,14 +18,13 @@ class VectorDBClient():
         self, 
         url: str, 
         collection_name: str,
+        vector_size: Optional[int],
     ):
         self.client = QdrantClient(url=url)
 
-        client = QdrantClient(url="http://localhost:6333")
-
         self.collection_name = collection_name
         if not self.client.collection_exists(collection_name=collection_name):
-            if not self.create_collection(collection_name): 
+            if not self.create_collection(collection_name, vector_size): 
                 raise ValueError("Error creating collection")
             
     def create_collection(
@@ -111,8 +110,7 @@ class VectorDBClient():
         Insert or update a vector.
 
         Parameters:
-            vector: List[float]
-            payload: dict
+            vector: VectorInput
         '''
         self.client.upsert(
             collection_name=self.collection_name,
