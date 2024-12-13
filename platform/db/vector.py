@@ -70,7 +70,7 @@ class VectorDBClient():
 
         Parameters:
             vector: List[float]
-            top_k: int = True
+            top_k: int = 5
             with_payload: bool = True
         '''
         search_result = self.client.query_points(
