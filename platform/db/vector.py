@@ -94,7 +94,7 @@ class VectorDBClient():
         Search for a vector by id.
 
         Parameters:
-            vector_id: int
+            vector_id: UUID | str
             top_k: int
             with_payload: bool = True
         '''
