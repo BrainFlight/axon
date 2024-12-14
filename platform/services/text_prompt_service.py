@@ -19,8 +19,8 @@ cohere_interface = ModelInterface(cohere_config)
 
 local_config = ModelConfig(
     provider=ModelProvider.LOCAL,
-    model_name="bert-base-uncased",
-    additional_params={"task": "sentiment-analysis"},
+    model_name="distilbert/distilgpt2",
+    additional_params={"task": "text-generation"},
 )
 
 local_interface = ModelInterface(local_config)
