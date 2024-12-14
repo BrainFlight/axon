@@ -7,7 +7,6 @@ from fastapi import APIRouter
 
 router = APIRouter()
 
-
 class NewExperimentInput(BaseModel):
     name: str
     # TODO: Modify these as needed
