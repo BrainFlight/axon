@@ -1,0 +1,56 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres
+  namespace: data-services
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: postgres
+  template:
+    metadata:
+      labels:
+        run: postgres
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:17.2
+          ports:
+            - containerPort: 5432
+          envFrom:
+            - secretRef:
+                name: postgres-secret
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: postgres-vol
+          resources:
+            requests:
+              memory: "1Gi"
+              cpu: "500m"
+            limits:
+              memory: "2Gi"
+              cpu:  "1"
+      volumes:
+        - name: postgres-vol
+          persistentVolumeClaim:
+            claimName: postgres-pv-claim
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    run: postgres
+  name: postgres
+  namespace: data-services
+spec:
+  ports:
+  - nodePort: 30000
+    port: 5432
+    protocol: TCP
+    targetPort: 5432
+  selector:
+    run: postgres
+  type: NodePort
+---
