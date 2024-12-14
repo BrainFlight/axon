@@ -43,7 +43,7 @@ def update_waypoints(body: UpdateWaypointsInput):
     """Update Waypoints Endpoint."""
     return WaypointV1PutResponse(response={"Response": "Success"})
 
-@router.put("/v1/waypoint")
+@router.delete("/v1/waypoint")
 def delete_waypoints(body: DeleteWaypointsInput):
     """Delete Waypoints Endpoint."""
     return WaypointV1DeleteResponse(response={"Response": "Success"})
