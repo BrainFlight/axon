@@ -11,7 +11,12 @@ from config import GlobalConfig
 
 config = GlobalConfig()
 
-app = FastAPI()
+app = FastAPI(
+    title="FYDP Team 7 - RobotNav",
+    description="Platform API for RobotNav Project",
+    summary="Enabling accessible and explainable Human-Robot Interaction through your favourite large language models",
+    version="0.1.0",
+)
 
 origins = [
     "*",

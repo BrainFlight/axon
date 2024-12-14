@@ -11,7 +11,6 @@ class TextPromptInput(BaseModel):
     model_name: str
     prompt_format_name: str
     prompt_args: Optional[dict]
-    rag_params: Optional[Dict[str, str]]
     # max_tokens: Optional[int]
     # temperature: Optional[float]
     # top_p: Optional[float]
@@ -33,8 +32,7 @@ def text_prompt(body: TextPromptInput):
     response = text_prompt_service(
         body.model_name, 
         body.prompt_format_name, 
-        body.prompt_args,
-        body.rag_params
+        body.prompt_args
     )
 
     return TextPromptV1PostResponse(response={"Response": response})
