@@ -11,7 +11,7 @@ from rag.fill import FILL_PARAMS
 
 logger = logging.getLogger(__name__)
 
-local_prompt_path = Path('/Users/ammarsiddiqui/Documents/Ammar_Dev/FYDP/fydp-repo/platform/prompt/local_prompts.yaml')
+local_prompt_path = Path('./local_prompts.yaml')
 
 
 @dataclass

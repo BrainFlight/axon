@@ -7,7 +7,7 @@ from fastapi import APIRouter
 from services.text_prompt_service import text_prompt_service
 
 
-class prompt_body(BaseModel):
+class TextPromptInput(BaseModel):
     model_name: str
     prompt: str
     prompt_args: Optional[dict]
@@ -19,15 +19,15 @@ class prompt_body(BaseModel):
     stop: Optional[List[str]]
     # load_to_cache: Optional[bool] = False
 
-class api_response(BaseModel):
+class TextPromptV1PostResponse(BaseModel):
     response : Dict[str, Any]
 
 router = APIRouter()
 
 @router.post("/v1/text_prompt")
-def text_prompt(body: prompt_body):
+def text_prompt(body: TextPromptInput):
     """Text Prompt Endpoint."""
     # TODO: Validate input
     response = text_prompt_service(body.prompt)
 
-    return api_response(response={"Response": response})
+    return TextPromptV1PostResponse(response={"Response": response})
