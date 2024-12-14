@@ -11,8 +11,6 @@ from rag.fill import FILL_PARAMS
 
 logger = logging.getLogger(__name__)
 
-local_prompt_path = Path('/Users/ammarsiddiqui/Documents/Ammar_Dev/FYDP/fydp-repo/platform/prompt/local_prompts.yaml')
-
 
 @dataclass
 class Prompt:
@@ -56,7 +54,7 @@ class Prompt:
         template = jinja2.Template(self.prompt)
         return template.render(**kwargs)
 
-def load_prompt_from_file(prompt_name: str) -> Prompt:
+def load_prompt_from_file(prompt_name: str, file_path: Path) -> Prompt:
     """
     Load prompts from a local YAML file.
     
@@ -66,7 +64,7 @@ def load_prompt_from_file(prompt_name: str) -> Prompt:
     Returns:
         Prompt: Prompt object
     """
-    with open(local_prompt_path, 'r') as file:
+    with open(file_path, 'r') as file:
         prompts_yaml = yaml.safe_load(file)
     
     return Prompt(

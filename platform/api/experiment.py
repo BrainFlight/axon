@@ -1,25 +1,30 @@
+import json
+from typing import List, Optional, Dict, Any
+
 from pydantic import BaseModel
 from fastapi import APIRouter
-from typing import List
-
-class experiment_body(BaseModel):
-    prompt: str
-    max_tokens: int
-    temperature: float
-    top_p: float
-    frequency_penalty: float
-    presence_penalty: float
-    stop: list
-    model: str
-    output_format: str
-    pipeline: str
-
-class experiments(BaseModel):
-    experiments: List[experiment_body]
 
 
 router = APIRouter()
 
+class NewExperimentInput(BaseModel):
+    name: str
+    # TODO: Modify these as needed
+    # prompt: str
+    # max_tokens: int
+    # temperature: float
+    # top_p: float
+    # frequency_penalty: float
+    # presence_penalty: float
+    # stop: list
+    # model: str
+    # output_format: str
+    # pipeline: str
+
+class ExperimentV1PostResponse(BaseModel):
+    response : Dict[str, Any]
+
 @router.post("/v1/experiment")
-async def experiment(body: experiments):
-    return body
+def new_experiment(body: NewExperimentInput):
+    """Endpoint for creating a new experiment."""
+    return ExperimentV1PostResponse(response={"Response": "Success"})

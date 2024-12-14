@@ -7,27 +7,32 @@ from fastapi import APIRouter
 from services.text_prompt_service import text_prompt_service
 
 
-class prompt_body(BaseModel):
+class TextPromptInput(BaseModel):
     model_name: str
-    prompt: str
+    prompt_format_name: str
     prompt_args: Optional[dict]
-    max_tokens: Optional[int]
-    temperature: Optional[float]
-    top_p: Optional[float]
-    frequency_penalty: Optional[float]
-    presence_penalty: Optional[float]
-    stop: Optional[List[str]]
+    # max_tokens: Optional[int]
+    # temperature: Optional[float]
+    # top_p: Optional[float]
+    # frequency_penalty: Optional[float]
+    # presence_penalty: Optional[float]
+    # stop: Optional[List[str]]
     # load_to_cache: Optional[bool] = False
 
-class api_response(BaseModel):
+class TextPromptV1PostResponse(BaseModel):
     response : Dict[str, Any]
 
 router = APIRouter()
 
 @router.post("/v1/text_prompt")
-def text_prompt(body: prompt_body):
+def text_prompt(body: TextPromptInput):
     """Text Prompt Endpoint."""
     # TODO: Validate input
-    response = text_prompt_service(body.prompt)
 
-    return api_response(response={"Response": response})
+    response = text_prompt_service(
+        body.model_name, 
+        body.prompt_format_name, 
+        body.prompt_args
+    )
+
+    return TextPromptV1PostResponse(response={"Response": response})

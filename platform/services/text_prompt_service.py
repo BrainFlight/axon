@@ -1,6 +1,8 @@
 import json
 import logging
 
+from pathlib import Path
+
 from inference.model_interface import ModelConfig, ModelInterface, ModelProvider
 from config import GlobalConfig
 from prompt.prompt import load_prompt_from_file
@@ -17,22 +19,35 @@ cohere_config = ModelConfig(
 
 cohere_interface = ModelInterface(cohere_config)
 
-local_config = ModelConfig(
+default_local_config = ModelConfig(
     provider=ModelProvider.LOCAL,
-    model_name="bert-base-uncased",
-    additional_params={"task": "sentiment-analysis"},
+    model_name="distilbert/distilgpt2",
+    additional_params={"task": "text-generation"},
 )
 
-local_interface = ModelInterface(local_config)
+local_interface = ModelInterface(default_local_config)
 
-def text_prompt_service(input_prompt: str) -> str:
+loaded_models = {
+    "cohere": cohere_interface,
+    "local_default": local_interface,
+}
+
+def text_prompt_service(
+    model_name: str, 
+    prompt_format_name: str, # e7_v1_xrif_waypoints_keywords
+    prompt_args: dict,
+) -> str:
     """Text Prompt Service."""
-    # response = local_interface.prompt(f"{PROMPT_V1}{input_prompt}")
-    # response = json.loads(response)
+    local_prompt_path = Path('../local_prompts.yaml')
 
-    prompt = load_prompt_from_file("e7_v1_xrif_waypoints_keywords")
+    if model_name not in loaded_models.keys():
+        return "Model not found"
+    
+    model = loaded_models[model_name]
 
-    response = prompt.render(query=input_prompt)
+    prompt = load_prompt_from_file(prompt_format_name, local_prompt_path)
+
+    response = model.prompt(prompt.render(**prompt_args))
 
     logger.info(f"Response received: {response}")
     print(response)
