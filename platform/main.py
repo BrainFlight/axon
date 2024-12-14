@@ -6,7 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from api.experiment import router as experiment_router
 from api.image_text_prompt import router as image_text_prompt_router
 from api.text_prompt import router as text_prompt_router
-from config.config import GlobalConfig
+from config import GlobalConfig
 
 
 config = GlobalConfig()

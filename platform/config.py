@@ -23,5 +23,4 @@ class GlobalConfig:
         self.minio_endpoint_url: str | None = os.getenv("MINIO_ENDPOINT_URL")
 
         # Qdrant Vector DB
-        self.qdrant_host: str = os.getenv("QDRANT_HOST", "http://localhost")
-        self.qdrant_port: int = os.getenv("QDRANT_PORT", 6333)
+        self.qdrant_url: str = os.getenv("QDRANT_URL", "http://localhost:6333")

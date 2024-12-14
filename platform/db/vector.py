@@ -1,40 +1,57 @@
 import uuid
-from uuid import UUID
-from typing import List
+from typing import List, Dict, Optional, Any
 import logging
 
+from pydantic import BaseModel
 from qdrant_client import QdrantClient
-from qdrant_client.models import VectorParams, PointStruct
+from qdrant_client.models import Distance, VectorParams, PointStruct
 
 
 logger = logging.getLogger(__name__)
 
+class VectorInput(BaseModel):
+    vector: List[float]
+    payload: Dict[str, Any]
+
+class VectorOutput(BaseModel):
+    vector_id: uuid.UUID
+    vector: List[float]
+    payload: Dict[str, Any]
+
 class VectorDBClient():
-    def __init__(self, url: str, collection_name: str):
+    def __init__(
+        self, 
+        url: str, 
+        collection_name: str,
+        vector_size: Optional[int],
+    ):
         self.client = QdrantClient(url=url)
+
         self.collection_name = collection_name
         if not self.client.collection_exists(collection_name=collection_name):
-            if not self.create_collection(collection_name): 
+            if not self.create_collection(collection_name, vector_size): 
                 raise ValueError("Error creating collection")
             
     def create_collection(
         self,
         collection_name: str,
-        vectors_config: VectorParams
+        vector_size: int,
+        distance: Distance = Distance.COSINE
     ) -> bool:
         '''
         Create a new collection.
 
         Parameters:
             collection_name: str
-            vectors_config: VectorParams (optional)
+            vector_size: int
+            distance: Distance = Distance.COSINE
         '''
         return self.client.create_collection(
             collection_name=collection_name,
-            vectors_config=vectors_config,
+            vectors_config=VectorParams(size=vector_size, distance=distance),
         )
 
-    def delete_vector(self, vector_id: UUID | str):
+    def delete_vector(self, vector_id: uuid.UUID | str):
         '''
         Delete a vector based on id.
 
@@ -49,7 +66,7 @@ class VectorDBClient():
     def search_vectors(
         self, 
         vector: List[float], 
-        top_k: int, 
+        top_k: int = 5, 
         with_payload: bool = True
     ) -> List:
         '''
@@ -57,7 +74,7 @@ class VectorDBClient():
 
         Parameters:
             vector: List[float]
-            top_k: int
+            top_k: int = 5
             with_payload: bool = True
         '''
         search_result = self.client.query_points(
@@ -73,7 +90,7 @@ class VectorDBClient():
     
     def search_vector_by_id(
         self, 
-        vector_id: UUID | str, 
+        vector_id: uuid.UUID | str, 
         top_k: int, 
         with_payload: bool = True
     ) -> List:
@@ -81,7 +98,7 @@ class VectorDBClient():
         Search for a vector by id.
 
         Parameters:
-            vector_id: int
+            vector_id: UUID | str
             top_k: int
             with_payload: bool = True
         '''
@@ -93,24 +110,44 @@ class VectorDBClient():
             limit=top_k,
         )
 
-    def upsert_vector(self, vector: List[float], payload: dict):
+    def upsert_vector(self, vector_input: VectorInput):
         '''
         Insert or update a vector.
 
         Parameters:
-            vector: List[float]
-            payload: dict
+            vector: VectorInput
         '''
         self.client.upsert(
             collection_name=self.collection_name,
             wait=True,
             points=[
                 PointStruct(
-                    id=str(uuid.uuid4()),
-                    payload=payload,
-                    vector=[i/388 for i in range(384)] # vector
+                    id = uuid.uuid4(),
+                    payload = vector_input.payload,
+                    vector = vector_input.vector
                 )
             ]
         )
 
-    # TODO: Create batch upsert method
+    def upsert_vectors(self, vectors: List[VectorInput]):
+        '''
+        Insert or update a vector.
+
+        Parameters:
+            vectors: List[VectorInput]
+        '''
+        points_list = []
+        for i in vectors:
+            points_list.append(
+                PointStruct(
+                    id=str(uuid.uuid4()),
+                    payload=i.payload,
+                    vector=i.vector
+                )
+            )
+        
+        return self.client.upsert(
+            collection_name = self.collection_name,
+            wait = True,
+            points = points_list
+        )
