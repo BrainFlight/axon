@@ -2,12 +2,16 @@ import json
 import yaml
 import logging
 import uuid
+from typing import Dict, Any, Optional
 from dataclasses import dataclass
-from typing import Dict, Any
+from functools import lru_cache
 from pathlib import Path
+
 import jinja2
 
 from rag.fill import FILL_PARAMS
+from db.cache import CacheClient
+from db.db_client import DBClient
 
 logger = logging.getLogger(__name__)
 
@@ -75,17 +79,58 @@ def load_prompt_from_file(prompt_name: str, file_path: Path) -> Prompt:
         metadata={}
     )
 
-def load_prompt_by_name(prompt_name: str) -> Prompt:
+def purge_prompt_cache(prompt_name: str, cache: Optional[CacheClient] = None):
     """
-    Load prompts from database by name.
+    Purge both LRU and Redis caches for a prompt.
+    """
+    load_prompt_by_name.cache_clear()  # Clear LRU cache
+    if cache:
+        cache.delete(prompt_name)  # Clear Redis cache
+
+@lru_cache(maxsize=128)
+def load_prompt_by_name(
+    prompt_name: str,
+    db_client: DBClient = None, # TODO: Add DBClient
+    cache: Optional[CacheClient] = None
+) -> Optional[Prompt]:
+    """
+    Load prompts from database by name with local LRU and Redis caching.
     
     Args:
-        prompt_name (str): Name of the prompt
+        prompt_name: Name of the prompt
+        cache: Optional Redis cache client
         
     Returns:
-        Prompt: Prompt object
+        Prompt object if found, None if not found
     """
-    pass
+    try:
+        # Try Redis first if available
+        if cache:
+            cached_prompt = cache.get(prompt_name)
+            if cached_prompt:
+                return Prompt(**json.loads(cached_prompt))
+
+        # Load from database
+        prompt_data = "" # TODO: Load prompt from database
+        if not prompt_data:
+            return None
+
+        prompt = Prompt(**prompt_data)
+        
+        # Update Redis cache if available
+        if cache:
+            cache.set(
+                prompt_name, 
+                json.dumps(prompt.__dict__),
+                ex=3600*5  # 5 hour TTL
+            )
+            
+        return prompt
+
+    except Exception as e:
+        # Log error
+        print(f"Error loading prompt {prompt_name}: {e}")
+        return None
 
 def load_prompt_by_id(prompt_id: uuid.UUID) -> Prompt:
     """

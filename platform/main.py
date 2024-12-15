@@ -4,8 +4,9 @@ import sys
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from api.health_check import router as health_check_router
 from api.experiment import router as experiment_router
-from api.image_text_prompt import router as image_text_prompt_router
+from api.multimodal_prompt import router as multimodal_prompt_router
 from api.text_prompt import router as text_prompt_router
 from config import GlobalConfig
 
@@ -34,8 +35,9 @@ app.add_middleware(
 )
 
 app.include_router(experiment_router)
-app.include_router(image_text_prompt_router)
+app.include_router(multimodal_prompt_router)
 app.include_router(text_prompt_router)
+app.include_router(health_check_router)
 
 if __name__ == "__main__":
     import uvicorn

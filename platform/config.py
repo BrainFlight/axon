@@ -24,3 +24,7 @@ class GlobalConfig:
 
         # Qdrant Vector DB
         self.qdrant_url: str = os.getenv("QDRANT_URL", "http://localhost:6333")
+
+        # ValKey Cache
+        self.cache_host: str = os.getenv("CACHE_HOST", "localhost")
+        self.cache_port: int = os.getenv("CACHE_PORT", 6379)

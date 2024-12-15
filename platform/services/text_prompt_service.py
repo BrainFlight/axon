@@ -1,15 +1,32 @@
 import json
 import logging
+from typing import List, Any
 
 from pathlib import Path
 
-from inference.model_interface import ModelConfig, ModelInterface, ModelProvider
+from llm_inference.model_interface import (
+    ModelConfig, 
+    ModelInterface,
+    ModelProvider,
+)
 from config import GlobalConfig
 from prompt.prompt import load_prompt_from_file
+
 
 logger = logging.getLogger(__name__)
 
 config = GlobalConfig()
+
+MODEL_ARGS = {
+    "max_tokens": int,
+    "temperature": float,
+    "top_p": float,
+    "frequency_penalty": float,
+    "presence_penalty": float,
+    "stop": List[str],
+    "structured_output": Any,
+    "load_to_cache": bool,
+}
 
 cohere_config = ModelConfig(
     provider=ModelProvider.COHERE,
@@ -34,8 +51,9 @@ loaded_models = {
 
 def text_prompt_service(
     model_name: str, 
-    prompt_format_name: str, # e7_v1_xrif_waypoints_keywords
+    prompt_format_name: str,
     prompt_args: dict,
+    model_args: dict = None,
 ) -> str:
     """Text Prompt Service."""
     local_prompt_path = Path('../local_prompts.yaml')

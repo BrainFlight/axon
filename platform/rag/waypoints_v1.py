@@ -3,6 +3,8 @@ from typing import Dict, List, Optional, Any
 from functools import lru_cache
 import uuid
 
+from db.db_client import DBClient
+
 @dataclass
 class Waypoint:
     id: uuid.UUID
@@ -16,7 +18,7 @@ class WaypointRAG:
         self._waypoints: Dict[str, Waypoint] = {}
         self._alias_map: Dict[str, str] = {}
 
-    def initialize_waypoints(self, db_client: Optional[Any] = None, location_set: Optional[str] = None): # TODO: Update to include DB client
+    def load_waypoints(self, db_client: Optional[DBClient] = None, location_set: Optional[str] = None): # TODO: Update to include DB client
         """Initialize the waypoint system with all known locations from a database."""
         init_dict = {
             "E7 1st floor Elevators": Waypoint(

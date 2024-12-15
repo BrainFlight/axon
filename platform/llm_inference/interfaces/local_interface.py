@@ -1,16 +1,11 @@
-import os
-import sys
-
-import cohere
-
-sys.path.append(os.path.join(os.path.dirname(__file__), "..", ".."))
-from inference.base import LLMStrategy, ModelConfig
+from rpc.local_inference import InferencePodClient
+from llm_inference.base import LLMStrategy, ModelConfig
 
 
-class CohereStrategy(LLMStrategy):
+class LocalStrategy(LLMStrategy):
     def __init__(self, config: ModelConfig):
         self.config = config
-        self._cohere_client = cohere.ClientV2(api_key=config.api_key)
+        self._client = InferencePodClient(host="localhost", port=50051)
     
     def _format_prompt_with_skills(self, prompt: str) -> str:
         if not self.config.supported_skills:
@@ -37,18 +32,19 @@ class CohereStrategy(LLMStrategy):
         formatted_prompt = self._format_prompt_with_skills(prompt)
         formatted_prompt = self._format_prompt_for_output(formatted_prompt)
 
-        if kwargs.get("model_name"):
-            model_name = kwargs["model_name"]
-        else:
-            model_name = "command-r-plus-08-2024"
-        
-        response = self._cohere_client.chat(
-            model=model_name,
-            messages=[
-                {
-                    "role" : "user", 
-                    "content" : prompt
-                }
-            ]
+        # Configure the model
+        task = self.config.additional_params.get("task", "sentiment-analysis")
+
+        success, message = self._client.configure_model(
+            model_name=self.config.model_name,
+            task=task
         )
-        return response.message.content[0].text
+        print(f"Configuration: {message}")
+        
+        if success:
+            output, confidence = self._client.run_inference(prompt)
+            print(f"Output: {output}")
+            print(f"Confidence: {confidence}")
+        
+            return output
+        return "Error running inference"
