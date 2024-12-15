@@ -1,0 +1,31 @@
+namespace: platform
+
+replicaCount: 1
+image:
+  repository: fydp-platform-api
+  tag: latest
+  pullPolicy: IfNotPresent # IfNotPresent (Use "Never" for local images, otherwise "Always" or "IfNotPresent")
+
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 8000
+
+ingress:
+  enabled: true
+  className: nginx
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: "10m"
+  hosts:
+    - host: localhost
+      paths:
+        - path: /
+          pathType: Prefix
+
+resources:
+  limits:
+    cpu: 500m
+    memory: 512Mi
+  requests:
+    cpu: 200m
+    memory: 256Mi

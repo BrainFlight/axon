@@ -8,8 +8,8 @@ dotenv.load_dotenv()
 class GlobalConfig:
     def __init__(self):
         # API
+        self.api_host: str = os.getenv("API_HOST", "0.0.0.0")
         self.api_port: int = os.getenv("API_PORT", 8000)
-        self.api_host: str = os.getenv("API_HOST", "localhost")
 
         # Model Interface API Keys
         self.openai_api_key: str | None = os.getenv("OPENAI_API_KEY")

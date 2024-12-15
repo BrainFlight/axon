@@ -1,4 +1,5 @@
 import os
+import sys
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -38,4 +39,4 @@ app.include_router(text_prompt_router)
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="localhost", port=8000)
+    uvicorn.run(app, host=config.api_host, port=config.api_port)
