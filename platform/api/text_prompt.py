@@ -20,7 +20,7 @@ class TextPromptInput(BaseModel):
     # load_to_cache: Optional[bool] = False
 
 class TextPromptV1PostResponse(BaseModel):
-    response : Dict[str, Any]
+    response: Dict[str, Any]
 
 router = APIRouter()
 
