@@ -1,8 +1,8 @@
 
 .PHONY: run
-run-api-dev:
+run:
 	python3 -m main
 
 .PHONY: dashboard
-run-dashboard:
+dashboard:
 	streamlit run dashboard.py
