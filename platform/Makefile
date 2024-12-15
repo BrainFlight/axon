@@ -3,6 +3,6 @@
 run-api-dev:
 	python3 -m main
 
-.PHONY: run-dashboard
+.PHONY: dashboard
 run-dashboard:
 	streamlit run dashboard.py
