@@ -56,7 +56,7 @@ def text_prompt_service(
     model_args: dict = None,
 ) -> str:
     """Text Prompt Service."""
-    local_prompt_path = Path('/Users/ammarsiddiqui/Documents/Ammar_Dev/FYDP/fydp-repo/platform/local_prompts.yaml')
+    local_prompt_path = Path('../local_prompts.yaml')
 
     if model_name not in loaded_models.keys():
         return "Model not found"
