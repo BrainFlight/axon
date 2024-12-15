@@ -4,7 +4,7 @@ import sys
 import cohere
 
 sys.path.append(os.path.join(os.path.dirname(__file__), "..", ".."))
-from inference.base import LLMStrategy, ModelConfig
+from llm_inference.base import LLMStrategy, ModelConfig
 
 
 class CohereStrategy(LLMStrategy):

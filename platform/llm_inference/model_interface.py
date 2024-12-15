@@ -3,9 +3,9 @@ from typing import List, Union
 
 # from inference.interfaces.openai_interface import OpenAIStrategy
 # from inference.interfaces.anthropic_interface import AnthropicStrategy
-from inference.interfaces.cohere_interface import CohereStrategy
-from inference.interfaces.local_interface import LocalStrategy
-from inference.base import LLMStrategy, ModelProvider, ModelConfig, OutputFormat
+from llm_inference.interfaces.cohere_interface import CohereStrategy
+from llm_inference.interfaces.local_interface import LocalStrategy
+from llm_inference.base import LLMStrategy, ModelProvider, ModelConfig, OutputFormat
 from skills.skill_spec import Skill
 
 logger = logging.getLogger(__name__)

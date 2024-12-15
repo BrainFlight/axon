@@ -2,7 +2,7 @@ import logging
 
 from openai import OpenAI
 
-from inference.model_interface import LLMStrategy
+from llm_inference.model_interface import LLMStrategy
 
 
 def send_to_gpt4(client: OpenAI, prompt: str, model_name: str = "gpt-4o-mini"):

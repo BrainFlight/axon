@@ -3,7 +3,7 @@ import logging
 
 from pathlib import Path
 
-from inference.model_interface import ModelConfig, ModelInterface, ModelProvider
+from llm_inference.model_interface import ModelConfig, ModelInterface, ModelProvider
 from config import GlobalConfig
 from prompt.prompt import load_prompt_from_file
 

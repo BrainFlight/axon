@@ -2,7 +2,7 @@ import logging
 
 import anthropic
 
-from inference.model_interface import LLMStrategy
+from llm_inference.model_interface import LLMStrategy
 
 
 def send_to_claude(client: anthropic.Anthropic, prompt: str):

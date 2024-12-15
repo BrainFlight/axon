@@ -1,5 +1,5 @@
 from rpc.local_inference import InferencePodClient
-from inference.base import LLMStrategy, ModelConfig
+from llm_inference.base import LLMStrategy, ModelConfig
 
 
 class LocalStrategy(LLMStrategy):
