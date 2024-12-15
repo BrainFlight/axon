@@ -1,7 +1,7 @@
 
-.PHONY: run-api-dev
+.PHONY: run-api
 run-api-dev:
-	fastapi dev main.py
+	python3 -m main
 
 .PHONY: run-dashboard
 run-dashboard:
