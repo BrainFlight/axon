@@ -12,43 +12,48 @@ class CohereStrategy(LLMStrategy):
         self.config = config
         self._cohere_client = cohere.ClientV2(api_key=config.api_key)
     
-    def _format_prompt_with_skills(self, prompt: str) -> str:
+    def _get_skills(self) -> str | None:
+        """Get Skills for Cohere Model."""
         if not self.config.supported_skills:
-            return prompt
+            return None
         
-        # Anthropic-specific implementation using natural language
         skill_descriptions = [
             f"- {skill.name}: {skill.description}"
             for skill in self.config.supported_skills.values()
         ]
         
-        return f"Using the following capabilities:\n{''.join(skill_descriptions)}\n\n{prompt}"
+        return f"Using the following skills:\n{''.join(skill_descriptions)}"
 
-    def _format_prompt_for_output(self, prompt: str) -> str:
-        if not self.config.default_output_format:
-            return prompt
-            
-        # Anthropic-specific output formatting using natural language
-        if self.current_output_format.format_type == "json":
-            return f"{prompt}\nProvide your response in valid JSON format."
-        return prompt
 
     def prompt(self, prompt: str, **kwargs) -> str:
-        formatted_prompt = self._format_prompt_with_skills(prompt)
-        formatted_prompt = self._format_prompt_for_output(formatted_prompt)
-
+        """Prompt a Cohere Model."""
         if kwargs.get("model_name"):
             model_name = kwargs["model_name"]
         else:
             model_name = "command-r-plus-08-2024"
-        
-        response = self._cohere_client.chat(
-            model=model_name,
-            messages=[
-                {
-                    "role" : "user", 
-                    "content" : prompt
-                }
-            ]
-        )
-        return response.message.content[0].text
+
+        if kwargs.get("structured_output"):
+            structured_output = kwargs["structured_output"]
+    
+            response = self._cohere_client.chat(
+                model=model_name,
+                messages=[
+                    {
+                        "role" : "user", 
+                        "content" : prompt
+                    }
+                ],
+                response_format=structured_output,
+            )
+            return response.message.content[0].text
+        else:
+            response = self._cohere_client.chat(
+                model=model_name,
+                messages=[
+                    {
+                        "role" : "user", 
+                        "content" : prompt
+                    }
+                ]
+            )
+            return response.message.content[0].text
