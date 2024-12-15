@@ -1,5 +1,5 @@
 
-.PHONY: run-api
+.PHONY: run
 run-api-dev:
 	python3 -m main
 
