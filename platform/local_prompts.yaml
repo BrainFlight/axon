@@ -205,8 +205,7 @@ e7_v2_xrif_actions:
               }
             },
             {
-              "speak": "Can I have a coffee?",
-              "ask": "coffee"
+              "speak": "Can I have a coffee?"
             },
             {
               "wait": 10
