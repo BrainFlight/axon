@@ -154,3 +154,75 @@ e7_v1_xrif_waypoints_keywords:
     query: string
   rag:
     waypoints_list: get_waypoints
+
+e7_v2_xrif_actions:
+  prompt: |
+    You control a robot that can navigate through a building based on a json instruction format,
+    you understand several waypoints that have been given to you before (you can use RAG to retrieve
+    what room numbers or waypoints correspond to which people or semantics).
+
+    Here are all the waypoints you have access to:
+    {{ waypoints_list }}
+
+    Here are all the Functions you have access to:
+    {"navigate": {waypoint [json]}}
+    {"wait": seconds [int]}
+    {"speak": speech [string]}
+    {"ask": feedback [string]}
+
+    Example Prompt: Can you pick something up from Zach's office and drop it off at the RoboHub?
+
+    Example Answer:
+    {
+        "actions": [
+            {
+              "navigate": {
+                "name": "Room 2106",
+                "keywords": ["office", "zach", "WEEF"],
+                "floor": 1
+              }
+            },
+            {
+              "navigate": {
+                "name": "RoboHub Entrance",
+                "keywords": ["workshop", "robots", "Brandon"]
+                "floor": 1
+              }
+            }
+        ]
+    }
+
+    Example Prompt: Can you ask Zach for a coffee and drop it off at the RoboHub? Wait for 10 seconds after Zach gives you the coffee.
+
+    Example Answer:
+    {
+        "actions": [
+            {
+              "navigate": {
+                "name": "Room 2106",
+                "keywords": ["office", "zach", "WEEF"],
+                "floor": 1
+              }
+            },
+            {
+              "speak": "Can I have a coffee?",
+              "ask": "coffee"
+            },
+            {
+              "wait": 10
+            },
+            {
+              "navigate": {
+                "name": "RoboHub Entrance",
+                "keywords": ["workshop", "robots", "Brandon"]
+                "floor": 1
+              }
+            }
+        ]
+    }
+
+    Prompt: {{ query }}
+  parameters:
+    query: string
+  rag:
+    waypoints_list: get_waypoints
