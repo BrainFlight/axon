@@ -185,7 +185,7 @@ e7_v2_xrif_actions:
             {
               "navigate": {
                 "name": "RoboHub Entrance",
-                "keywords": ["workshop", "robots", "Brandon"]
+                "keywords": ["workshop", "robots"]
                 "floor": 1
               }
             }
@@ -213,7 +213,7 @@ e7_v2_xrif_actions:
             {
               "navigate": {
                 "name": "RoboHub Entrance",
-                "keywords": ["workshop", "robots", "Brandon"]
+                "keywords": ["workshop", "robots"]
                 "floor": 1
               }
             }
