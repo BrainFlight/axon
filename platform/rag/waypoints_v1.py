@@ -129,7 +129,7 @@ class WaypointRAG:
             keywords = ', '.join(waypoint.keywords) if waypoint.keywords else "None"
             aliases = ', '.join(waypoint.aliases) if waypoint.aliases else "None"
             waypoint_list.append(
-                f"- {waypoint.name}, floor: {waypoint.floor}, keywords: {keywords}, aliases: {aliases}"
+                f"- {waypoint.name}, floor: {waypoint.floor}, keywords: [{keywords}], aliases: [{aliases}]"
             )
         
         return f"{chr(10).join(sorted(waypoint_list))}"

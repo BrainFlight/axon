@@ -1,8 +1,8 @@
 
-.PHONY: run-api-dev
-run-api-dev:
-	fastapi dev main.py
+.PHONY: run
+run:
+	python3 -m main
 
-.PHONY: run-dashboard
-run-dashboard:
+.PHONY: dashboard
+dashboard:
 	streamlit run dashboard.py

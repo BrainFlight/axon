@@ -64,10 +64,11 @@ def text_prompt_service(
     model = loaded_models[model_name]
 
     prompt = load_prompt_from_file(prompt_format_name, local_prompt_path)
+    rendered_prompt = prompt.render(**prompt_args)
+    print(f"Rendered prompt: {rendered_prompt}")
 
-    response = model.prompt(prompt.render(**prompt_args))
+    response = model.prompt(rendered_prompt, **model_args)
 
     logger.info(f"Response received: {response}")
-    print(response)
 
     return response

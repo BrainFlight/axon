@@ -11,7 +11,7 @@ class TextPromptInput(BaseModel):
     model_name: str
     prompt_format_name: str
     prompt_args: Optional[dict]
-    model_args: Optional[Dict[str, Any]]
+    model_args: Optional[Dict[str, Any]] = None
 
 class TextPromptV1PostResponse(BaseModel):
     response: Dict[str, Any]

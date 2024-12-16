@@ -11,6 +11,12 @@ class CohereStrategy(LLMStrategy):
     def __init__(self, config: ModelConfig):
         self.config = config
         self._cohere_client = cohere.ClientV2(api_key=config.api_key)
+
+    def _format_prompt_with_skills(self, prompt: str) -> str:
+        return prompt
+
+    def _format_prompt_for_output(self, prompt: str) -> str:
+        return prompt
     
     def _get_skills(self) -> str | None:
         """Get Skills for Cohere Model."""

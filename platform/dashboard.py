@@ -53,7 +53,8 @@ if st.button("Run Query"):
                 payload = {
                     "model_name": selected_model,
                     "prompt_format_name": selected_format,
-                    "prompt_args": json.loads(prompt)
+                    "prompt_args": json.loads(prompt),
+                    "model_args": {"structured_output": {"type": "json_object"}}
                 }
                 response = requests.post(api_url, json=payload)
                 result = response.json()
