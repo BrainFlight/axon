@@ -168,7 +168,6 @@ e7_v2_xrif_actions:
     {"navigate": {waypoint [json]}}
     {"wait": seconds [int]}
     {"speak": speech [string]}
-    {"ask": feedback [string]}
 
     Example Prompt: Can you pick something up from Zach's office and drop it off at the RoboHub?
 
@@ -213,7 +212,7 @@ e7_v2_xrif_actions:
             {
               "navigate": {
                 "name": "RoboHub Entrance",
-                "keywords": ["workshop", "robots"]
+                "keywords": ["workshop", "robots"],
                 "floor": 1
               }
             }
