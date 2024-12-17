@@ -5,7 +5,7 @@
   <version>0.0.1</version>
   <description>ROS node for handling gRPC navigation commands</description>
 
-  <maintainer email="your_email@example.com">Your Name</maintainer>
+  <maintainer email="">FYDP Team 7</maintainer>
   <license>TODO</license>
 
   <buildtool_depend>catkin</buildtool_depend>
