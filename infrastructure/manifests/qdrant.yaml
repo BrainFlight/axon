@@ -23,10 +23,10 @@ spec:
         - containerPort: 6333
         resources:
           requests:
-            memory: "2Gi"
+            memory: "1Gi"
             cpu: "500m"
           limits:
-            memory: "4Gi"
+            memory: "2Gi"
             cpu: "1"
         volumeMounts:
         - name: qdrant-storage
