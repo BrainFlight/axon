@@ -1,4 +1,10 @@
+.PHONY: run
+run:
+	python3 -m src.main
 
+.PHONY: dashboard
+dashboard:
+	streamlit run src/dashboard.py
 
 .PHONY: install-local-mac
 install-local-mac:
