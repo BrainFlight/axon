@@ -1,19 +1,20 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from src.api.health_check import router as health_check_router
-from src.api.experiment import router as experiment_router
-from src.api.multimodal_prompt import router as multimodal_prompt_router
-from src.api.text_prompt import router as text_prompt_router
 from config import GlobalConfig
+from constants import WELCOME_ASCII
+from api.health_check import router as health_check_router
+from api.experiment import router as experiment_router
+from api.multimodal_prompt import router as multimodal_prompt_router
+from api.text_prompt import router as text_prompt_router
 
 
 config = GlobalConfig()
 
 app = FastAPI(
-    title="FYDP Team 7 - RobotNav",
-    description="Platform API for RobotNav Project",
-    summary="Enabling accessible and explainable Human-Robot Interaction through your favourite large language models",
+    title="BrainFlight Axon",
+    description="Enabling accessible and explainable human-robot interaction through your favourite large language models",
+    summary="",
     version="0.1.0",
 )
 
@@ -39,4 +40,5 @@ app.include_router(health_check_router)
 if __name__ == "__main__":
     import uvicorn
 
+    print(WELCOME_ASCII)
     uvicorn.run(app, host=config.api_host, port=config.api_port)

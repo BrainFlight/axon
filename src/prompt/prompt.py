@@ -71,6 +71,7 @@ def load_prompt_from_file(prompt_name: str, file_path: Path) -> Prompt:
     Returns:
         Prompt: Prompt object
     """
+    # TODO: Implement error handling (try/catch)
     with open(file_path, "r") as file:
         prompts_yaml = yaml.safe_load(file)
 
