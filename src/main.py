@@ -41,4 +41,5 @@ if __name__ == "__main__":
     import uvicorn
 
     print(WELCOME_ASCII)
+    print(f"docs available at: http://{config.api_host}:{config.api_port}/docs")
     uvicorn.run(app, host=config.api_host, port=config.api_port)
