@@ -71,7 +71,7 @@ API Example
 
 ### Prerequisites
 
-Get API Keys
+Get API Keys for
 
 `.env` file:
 ```sh
@@ -79,6 +79,7 @@ ANTHROPIC_API_KEY=""
 OPENAI_API_KEY=""
 HF_ACCESS_TOKEN=""
 COHERE_API_KEY=""
+WANDB_API_KEY="" # Weights and Biases
 ```
 
 ### Installation
