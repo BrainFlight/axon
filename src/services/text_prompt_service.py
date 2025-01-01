@@ -9,7 +9,7 @@ from llm_inference.model_interface import (
     ModelProvider,
 )
 from config import GlobalConfig
-from prompt.prompt import load_prompt_from_file
+from prompting.prompt import load_prompt_from_file
 
 
 logger = logging.getLogger(__name__)

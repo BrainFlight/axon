@@ -3,7 +3,7 @@ from typing import Dict, Any, Optional, List, Union
 from dataclasses import dataclass, field
 from enum import Enum
 
-from skills.skill_spec import Skill
+from prompting.skills.skill_spec import Skill
 
 
 class ModelProvider(Enum):
