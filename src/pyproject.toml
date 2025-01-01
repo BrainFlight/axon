@@ -20,6 +20,9 @@ valkey = {extras = ["libvalkey"], version = "^6.0.2"}
 uvicorn = "^0.34.0"
 ray = {extras = ["data", "serve", "train", "tune"], version = "^2.40.0"}
 wandb = "^0.19.1"
+asyncio = "^3.4.3"
+onnxruntime = "^1.20.1"
+valkey-glide = "^1.2.1"
 
 [build-system]
 requires = ["poetry-core"]
