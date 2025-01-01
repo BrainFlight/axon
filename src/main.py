@@ -19,7 +19,8 @@ config = GlobalConfig()
 
 app = FastAPI(
     title="BrainFlight Axon",
-    description="Enabling accessible and explainable human-robot interaction through your favourite large language models",
+    description="Enabling accessible and explainable human-robot \
+        interaction through your favourite large language models",
     summary="",
     version="0.1.0",
 )
