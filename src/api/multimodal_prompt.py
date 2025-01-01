@@ -2,7 +2,7 @@ from fastapi import APIRouter
 from pydantic import BaseModel
 
 
-class image_text_prompt_body(BaseModel):
+class multimodal_prompt_body(BaseModel):
     prompt: str
     max_tokens: int
     temperature: float
@@ -16,6 +16,6 @@ class image_text_prompt_body(BaseModel):
 router = APIRouter()
 
 
-@router.post("/v1/image_text_prompt")
-async def image_text_prompt(body: image_text_prompt_body):
+@router.post("/v1/multimodal_prompt")
+async def multimodal_prompt(body: multimodal_prompt_body):
     return body
