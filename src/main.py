@@ -10,9 +10,9 @@ from fastapi.middleware.cors import CORSMiddleware
 from config import GlobalConfig
 from constants import WELCOME_ASCII
 from ray_utils.sessionManager import SessionStateManager
-from api.experiment import router as experiment_router
-from api.multimodal_prompt import router as multimodal_prompt_router
-from api.text_prompt import router as text_prompt_router
+from api.v1.experiment import router as experiment_router
+from api.v1.multimodal_prompt import router as multimodal_prompt_router
+from api.v1.text_prompt import router as text_prompt_router
 
 
 config = GlobalConfig()
@@ -69,8 +69,8 @@ if __name__ == "__main__":
 
     print(WELCOME_ASCII)
     print(
-        f"--------- Swagger docs available at: http://{config.api_host}:{config.api_port}/docs"
+        f"DOCS:     Swagger docs available at: http://{config.api_host}:{config.api_port}/docs"
     )
-    print(f"--------- Ray dashboard available at: http://{config.api_host}:8265")
+    print(f"DOCS:     Ray dashboard available at: http://{config.api_host}:8265")
     if ray.is_initialized():
         uvicorn.run(app, host=config.api_host, port=config.api_port, log_level="info")
