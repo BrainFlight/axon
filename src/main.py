@@ -13,6 +13,7 @@ from ray_utils.sessionManager import SessionStateManager
 from api.v1.experiment import router as experiment_router
 from api.v1.multimodal_prompt import router as multimodal_prompt_router
 from api.v1.text_prompt import router as text_prompt_router
+from api.v1.training_job import router as training_job_router
 
 
 config = GlobalConfig()
@@ -51,6 +52,7 @@ class APIDeployment:
         app.include_router(experiment_router)
         app.include_router(multimodal_prompt_router)
         app.include_router(text_prompt_router)
+        app.include_router(training_job_router)
 
     @app.get("/health")
     def health_check(self):

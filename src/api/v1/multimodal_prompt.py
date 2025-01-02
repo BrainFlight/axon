@@ -1,8 +1,12 @@
-from fastapi import APIRouter
 from pydantic import BaseModel
+from fastapi import APIRouter
+from fastapi.responses import JSONResponse
 
 
-class multimodal_prompt_body(BaseModel):
+router = APIRouter(prefix="/v1/multimodal_prompt")
+
+
+class MultimodalPromptV1Request(BaseModel):
     prompt: str
     max_tokens: int
     temperature: float
@@ -13,9 +17,10 @@ class multimodal_prompt_body(BaseModel):
     image: str
 
 
-router = APIRouter()
+class MultimodalPromptV1Response(BaseModel):
+    response: str
 
 
-@router.post("/v1/multimodal_prompt")
-async def multimodal_prompt(body: multimodal_prompt_body):
-    return body
+@router.post("/")
+async def multimodal_prompt(body: MultimodalPromptV1Request):
+    return JSONResponse(content={"response": "Multimodal Prompt Response"})
