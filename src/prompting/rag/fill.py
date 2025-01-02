@@ -1,6 +1,6 @@
 from typing import Dict, Callable
 
-from rag.waypoints_v1 import WaypointRAG
+from prompting.rag.waypoints_v1 import WaypointRAG
 
 waypoints = WaypointRAG()
 waypoints.load_waypoints()

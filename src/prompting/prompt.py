@@ -9,7 +9,7 @@ from pathlib import Path
 
 import jinja2
 
-from rag.fill import FILL_PARAMS
+from prompting.rag.fill import FILL_PARAMS
 from db.cache import CacheClient
 from db.db_client import DBClient
 
