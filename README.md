@@ -4,10 +4,10 @@
 
   <a href="https://github.com/ammar-s847/fydp-repo"><img width="140px" src="./docs/images/logo.png"></a>
 
-  <h3 align="center">FYDP Team 7</h3>
+  <h3 align="center">Axon - ML Platform</h3>
 
   <p align="center">
-    Enabling accessible and explainable Human-Robot Interaction by connecting your favourite large language models with tokenized robotic instructions!
+    ML platform for training, versioning, and experimenting with VLA models at scale
     <br />
     <a href="https://github.com/ammar-s847/fydp-repo"><strong>Explore the docs »</strong></a>
     <br />
