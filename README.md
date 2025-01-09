@@ -102,9 +102,8 @@ fastapi dev main.py
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-## Roadmap
+<!--## Roadmap-->
 
-- [] Build Inference Pods
-- [] Setup K8S Infra
+
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
