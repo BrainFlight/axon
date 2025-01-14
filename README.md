@@ -104,6 +104,3 @@ fastapi dev main.py
 
 <!--## Roadmap-->
 
-
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
