@@ -191,6 +191,42 @@ e7_v2_xrif_actions:
         ]
     }
 
+    Example Prompt: Can you go to the south entrance, wait 30 seconds then go to get a coffee at the C&D and bring it to the robohub?
+
+    Example Answer:
+     {
+        "actions": [
+            {
+              "navigate": {
+                "name": "E7 South Entrance",
+                "keywords": [],
+                "floor": 1
+              }
+            },
+            
+            {
+              "wait": 30
+            },
+            {
+              "navigate": {
+                "name": "E7 Coffee and Donuts",
+                "keywords": ["Coffee", "Doughnut" "CnD"],
+                "floor": 1
+              }
+            }
+             {
+              "speak": "Can I have a coffee?"
+            },
+            {
+              "navigate": {
+                "name": ""RoboHub Entrance",
+                "keywords": ["workshop", "robots"],
+                "floor": 1
+              }
+            }
+        ]
+    }
+
     Example Prompt: Can you ask Zach for a coffee and drop it off at the RoboHub? Wait for 10 seconds after Zach gives you the coffee.
 
     Example Answer:
