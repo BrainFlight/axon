@@ -19,7 +19,7 @@ from api.v1.training_job import router as training_job_router
 config = GlobalConfig()
 
 app = FastAPI(
-    title="BrainFlight Axon",
+    title="OpenXRIF Axon Platforn",
     description="Enabling accessible and explainable human-robot \
         interaction through your favourite large language models",
     summary="",

@@ -2,14 +2,14 @@
 <br />
 <div align="center">
 
-  <a href="https://github.com/ammar-s847/fydp-repo"><img width="140px" src="./docs/images/logo.png"></a>
+  <a href="https://github.com/openxrif/axon"><img width="140px" src="./docs/images/logo.png"></a>
 
   <h3 align="center">Axon - ML Platform</h3>
 
   <p align="center">
     ML platform for training, versioning, and experimenting with VLA models at scale
     <br />
-    <a href="https://github.com/ammar-s847/fydp-repo"><strong>Explore the docs »</strong></a>
+    <a href="https://github.com/openxrif/axon"><strong>Explore the docs »</strong></a>
     <br />
   </p>
 </div>
