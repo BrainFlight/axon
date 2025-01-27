@@ -9,7 +9,7 @@
   <p align="center">
     ML platform for training, versioning, and experimenting with VLA models at scale
     <br />
-    <a href="https://github.com/openxrif/axon"><strong>Explore the docs »</strong></a>
+    <a href="https://openxrif.github.io/docs/axon/"><strong>Explore the docs »</strong></a>
     <br />
   </p>
 </div>
